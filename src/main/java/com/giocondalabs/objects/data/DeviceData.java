@@ -3,7 +3,7 @@ package com.giocondalabs.objects.data;
 import static com.giocondalabs.utils.GeneralHelper.validateString;
 
 public record DeviceData(
-    String androidId,
+    String uniqueId,
     Integer sdkInt,
     String realiseVersion,
     String brand,
@@ -12,7 +12,7 @@ public record DeviceData(
 
     public boolean isValid() {
         return (
-            (validateString(androidId)) &&
+            (validateString(uniqueId)) &&
             (sdkInt != null) &&
             (validateString(realiseVersion)) &&
             (validateString(brand)) &&

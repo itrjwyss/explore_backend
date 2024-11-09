@@ -1,7 +1,10 @@
 package com.giocondalabs.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.giocondalabs.entities.devices.PhoneEntity;
+import com.giocondalabs.entities.devices.VisitorDeviceEntity;
 import com.giocondalabs.entities.identity.VisitorEntity;
+import com.giocondalabs.implementation.IdentityManager;
 import com.giocondalabs.objects.request.RegisterRequest;
 import com.giocondalabs.objects.response.MessageResponse;
 import com.giocondalabs.services.identity.VisitorService;
@@ -27,6 +30,9 @@ public class IdentityController extends BaseController {
     @Inject
     CountryService countryService;
 
+    @Inject
+    IdentityManager identityManager;
+
     @POST
     @Path("/register")
     public Response register(RegisterRequest request) throws UnexpectedException, JsonProcessingException {
@@ -48,8 +54,15 @@ public class IdentityController extends BaseController {
                 );
 
                 visitor = visitorService.save(visitor);
+                PhoneEntity phone = identityManager.checkDevice(request.deviceData());
+                VisitorDeviceEntity visitorDevice = identityManager.checkRelation(
+                    phone,
+                    visitor,
+                    request.versionCode(),
+                    request.versionName()
+                );
 
-
+                // Generar y envíar token de verificación de correo válido
 
                 return Response
                     .ok(
@@ -62,7 +75,7 @@ public class IdentityController extends BaseController {
                         AUTHORIZATION,
                         crypto.encrypt(
                             JsonProcessing.parseObjectToJson(
-                                createAuthorization(null)
+                                createAuthorization(visitorDevice)
                             )
                         )
                     )

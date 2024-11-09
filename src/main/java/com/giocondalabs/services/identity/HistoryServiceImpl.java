@@ -1,5 +1,6 @@
 package com.giocondalabs.services.identity;
 
+import com.giocondalabs.entities.devices.VisitorDeviceEntity;
 import com.giocondalabs.entities.identity.HistoryEntity;
 import com.giocondalabs.repositories.identity.HistoryRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,6 +21,11 @@ public class HistoryServiceImpl implements HistoryService {
     @Override
     public HistoryEntity findByKeycode(String keycode) {
         return repository.findByKeycode(keycode);
+    }
+
+    @Override
+    public HistoryEntity findByVisitorDevice(VisitorDeviceEntity visitorDevice) {
+        return repository.findByVisitorDevice(visitorDevice);
     }
 
     @Transactional

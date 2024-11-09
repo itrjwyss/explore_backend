@@ -47,7 +47,7 @@ public class VisitorDeviceEntity extends GenericEntity {
     private String versionName;
 
     @Column(name = "push_notification_token")
-    private String pushNotificationToken;
+    private String pushNotificationToken = null;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
